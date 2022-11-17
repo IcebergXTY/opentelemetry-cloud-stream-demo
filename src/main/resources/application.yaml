@@ -1,0 +1,42 @@
+spring:
+  cloud:
+    stream:
+      binders:
+        taskcore:
+          type: rabbit
+      bindings:
+        taskcore-message-input:
+          binder: taskcore
+          destination: luna-taskcore-exchange
+          group: taskcore
+        taskcore-message-output:
+          binder: taskcore
+          destination: luna-taskcore-exchange
+          group: taskcore
+      rabbit:
+        bindings:
+          taskcore-message-input:
+            consumer:
+              acknowledge-mode: MANUAL
+              exchange-type: fanout
+          taskcore-message-output:
+            producer:
+              exchange-type: fanout
+  # rabbitmq\u7684\u8FDE\u63A5\u53C2\u6570
+  rabbitmq:
+    addresses: "ubuntu-vmware:5672"
+    username: "iceberg"
+    password: "123456"
+    virtual-host: "/"
+
+server:
+  port: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
